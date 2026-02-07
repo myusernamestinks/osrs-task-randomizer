@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OSRS Boss Task Randomizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #facc15;
+    }
+
+    button {
+      background-color: #22c55e;
+      border: none;
+      padding: 16px 24px;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .card {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 16px;
+      margin-top: 25px;
+      font-size: 18px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🗡️ OSRS Boss Task Randomizer</h1>
+
+  <label>
+    <input type="checkbox" id="painModeToggle">
+    Enable Pain Mode 🔥
+  </label>
+
+  <button onclick="rollTask()">🎲 Roll Task</button>
+
+  <div class="card">
+    <p><strong>Boss:</strong> <span id="boss">—</span></p>
+    <p><strong>KC:</strong> <span id="kc">—</span></p>
+    <p><strong>Pain Mode:</strong> <span id="pain">—</span></p>
+  </div>
+
+<script>
+const bosses = [
+  "Abyssal Sire",
+  "Alchemical Hydra",
+  "Barrows",
+  "Bryophyta",
+  "Callisto",
+  "Cerberus",
+  "Chaos Elemental",
+  "Chaos Fanatic",
+  "Commander Zilyana",
+  "Corporeal Beast",
+  "Dagannoth Kings",
+  "Deranged Archaeologist",
+  "General Graardor",
+  "Giant Mole",
+  "Grotesque Guardians",
+  "Hespori",
+  "Kalphite Queen",
+  "King Black Dragon",
+  "Kraken",
+  "Kree'arra",
+  "K'ril Tsutsaroth",
+  "Mimic",
+  "Nex",
+  "Nightmare",
+  "Phosani's Nightmare",
+  "Obor",
+  "Sarachnis",
+  "Scorpia",
+  "Skotizo",
+  "Tempoross",
+  "The Gauntlet",
+  "The Corrupted Gauntlet",
+  "The Leviathan",
+  "The Whisperer",
+  "Thermonuclear Smoke Devil",
+  "Tombs of Amascut",
+  "TzKal-Zuk",
+  "TzTok-Jad",
+  "Vardorvis",
+  "Venenatis",
+  "Vet'ion",
+  "Vorkath",
+  "Wintertodt",
+  "Zalcano",
+  "Zulrah"
+];
+
+function rollTask() {
+  const boss = bosses[Math.floor(Math.random() * bosses.length)];
+  const kc = Math.floor(Math.random() * 23) + 3;
+  const painEnabled = document.getElementById("painModeToggle").checked;
+
+  document.getElementById("boss").textContent = boss;
+  document.getElementById("kc").textContent = kc;
+  document.getElementById("pain").textContent = painEnabled ? "🔥 ENABLED" : "Normal";
+}
+</script>
+
+</body>
+</html>
