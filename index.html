@@ -45,11 +45,6 @@
       margin-top: 20px;
       font-size: 16px;
     }
-    li {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 6px;
-    }
   </style>
 </head>
 
@@ -77,6 +72,8 @@
   </div>
 
 <script>
+let streak = 0;
+
 const bosses = [
   { name: "Abyssal Sire", min: 3, max: 15 },
   { name: "Alchemical Hydra", min: 5, max: 20 },
@@ -87,33 +84,35 @@ const bosses = [
   { name: "Chaos Elemental", min: 3, max: 10 },
   { name: "Chaos Fanatic", min: 3, max: 10 },
   { name: "Commander Zilyana", min: 5, max: 20 },
-  { name: "Corporeal Beast", min: 1, max: 3 },
+  { name: "Corporeal Beast", min: 3, max: 10 },
   { name: "Dagannoth Kings", min: 5, max: 20 },
   { name: "Deranged Archaeologist", min: 3, max: 10 },
   { name: "General Graardor", min: 5, max: 20 },
   { name: "Giant Mole", min: 10, max: 25 },
   { name: "Grotesque Guardians", min: 3, max: 15 },
+  { name: "Hespori", min: 3, max: 10 },
   { name: "Kalphite Queen", min: 3, max: 10 },
   { name: "King Black Dragon", min: 5, max: 20 },
   { name: "Kraken", min: 5, max: 25 },
   { name: "Kree'arra", min: 5, max: 15 },
   { name: "K'ril Tsutsaroth", min: 5, max: 20 },
+  { name: "Mimic", min: 3, max: 5 },
   { name: "Nex", min: 3, max: 10 },
   { name: "Nightmare", min: 3, max: 10 },
-  { name: "Phosani's Nightmare", min: 1, max: 3 },
+  { name: "Phosani's Nightmare", min: 3, max: 5 },
   { name: "Obor", min: 3, max: 10 },
   { name: "Sarachnis", min: 5, max: 20 },
   { name: "Scorpia", min: 3, max: 10 },
-  { name: "Skotizo", min: 1, max: 5 },
+  { name: "Skotizo", min: 3, max: 10 },
   { name: "Tempoross", min: 5, max: 15 },
   { name: "The Gauntlet", min: 3, max: 10 },
   { name: "The Corrupted Gauntlet", min: 3, max: 7 },
   { name: "The Leviathan", min: 3, max: 10 },
   { name: "The Whisperer", min: 3, max: 10 },
   { name: "Thermonuclear Smoke Devil", min: 5, max: 20 },
-  { name: "Tombs of Amascut", min: 1, max: 5 },
-  { name: "TzKal-Zuk", min: 1, max: 3 },
-  { name: "TzTok-Jad", min: 1, max: 3 },
+  { name: "Tombs of Amascut", min: 3, max: 5 },
+  { name: "TzKal-Zuk", min: 3, max: 5 },
+  { name: "TzTok-Jad", min: 3, max: 5 },
   { name: "Vardorvis", min: 3, max: 10 },
   { name: "Venenatis", min: 3, max: 15 },
   { name: "Vet'ion", min: 3, max: 15 },
@@ -138,21 +137,24 @@ const painRules = [
 ];
 
 function rollTask() {
+  streak++;
+  document.getElementById("streak").textContent = streak;
+
   const boss = bosses[Math.floor(Math.random() * bosses.length)];
   const kc = Math.floor(Math.random() * (boss.max - boss.min + 1)) + boss.min;
   const painEnabled = document.getElementById("painModeToggle").checked;
 
+  let painText = "Normal";
+  if (painEnabled) {
+    painText = "🔥 " + painRules[Math.floor(Math.random() * painRules.length)];
+  }
+
   document.getElementById("boss").textContent = boss.name;
   document.getElementById("kc").textContent = kc;
-
-  if (painEnabled) {
-    const rule = painRules[Math.floor(Math.random() * painRules.length)];
-    document.getElementById("pain").textContent = "🔥 " + rule;
-  } else {
-    document.getElementById("pain").textContent = "Normal";
-  }
+  document.getElementById("pain").textContent = painText;
 }
 </script>
+
 
 
 </body>
