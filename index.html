@@ -45,6 +45,11 @@
       margin-top: 20px;
       font-size: 16px;
     }
+    li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 6px;
+    }
   </style>
 </head>
 
@@ -60,70 +65,95 @@
   <button onclick="rollTask()">🎲 Roll Task</button>
 
   <div class="card">
-    <p><strong>Boss:</strong> <span id="boss">—</span></p>
-    <p><strong>KC:</strong> <span id="kc">—</span></p>
-    <p><strong>Pain Mode:</strong> <span id="pain">—</span></p>
+  <p><strong>Boss:</strong> <span id="boss">—</span></p>
+  <p><strong>KC:</strong> <span id="kc">—</span></p>
+  <p><strong>Pain Mode:</strong> <span id="pain">—</span></p>
+  <p><strong>🔥 Streak:</strong> <span id="streak">0</span></p>
+  </div>
+
+  <div class="card">
+  <h3>📜 Task History</h3>
+  <ul id="history" style="list-style:none; padding:0; font-size:15px;"></ul>
   </div>
 
 <script>
 const bosses = [
-  "Abyssal Sire",
-  "Alchemical Hydra",
-  "Barrows",
-  "Bryophyta",
-  "Callisto",
-  "Cerberus",
-  "Chaos Elemental",
-  "Chaos Fanatic",
-  "Commander Zilyana",
-  "Corporeal Beast",
-  "Dagannoth Kings",
-  "Deranged Archaeologist",
-  "General Graardor",
-  "Giant Mole",
-  "Grotesque Guardians",
-  "Hespori",
-  "Kalphite Queen",
-  "King Black Dragon",
-  "Kraken",
-  "Kree'arra",
-  "K'ril Tsutsaroth",
-  "Mimic",
-  "Nex",
-  "Nightmare",
-  "Phosani's Nightmare",
-  "Obor",
-  "Sarachnis",
-  "Scorpia",
-  "Skotizo",
-  "Tempoross",
-  "The Gauntlet",
-  "The Corrupted Gauntlet",
-  "The Leviathan",
-  "The Whisperer",
-  "Thermonuclear Smoke Devil",
-  "Tombs of Amascut",
-  "TzKal-Zuk",
-  "TzTok-Jad",
-  "Vardorvis",
-  "Venenatis",
-  "Vet'ion",
-  "Vorkath",
-  "Wintertodt",
-  "Zalcano",
-  "Zulrah"
+  { name: "Abyssal Sire", min: 3, max: 15 },
+  { name: "Alchemical Hydra", min: 5, max: 20 },
+  { name: "Barrows", min: 5, max: 25 },
+  { name: "Bryophyta", min: 3, max: 10 },
+  { name: "Callisto", min: 3, max: 15 },
+  { name: "Cerberus", min: 5, max: 20 },
+  { name: "Chaos Elemental", min: 3, max: 10 },
+  { name: "Chaos Fanatic", min: 3, max: 10 },
+  { name: "Commander Zilyana", min: 5, max: 20 },
+  { name: "Corporeal Beast", min: 1, max: 3 },
+  { name: "Dagannoth Kings", min: 5, max: 20 },
+  { name: "Deranged Archaeologist", min: 3, max: 10 },
+  { name: "General Graardor", min: 5, max: 20 },
+  { name: "Giant Mole", min: 10, max: 25 },
+  { name: "Grotesque Guardians", min: 3, max: 15 },
+  { name: "Kalphite Queen", min: 3, max: 10 },
+  { name: "King Black Dragon", min: 5, max: 20 },
+  { name: "Kraken", min: 5, max: 25 },
+  { name: "Kree'arra", min: 5, max: 15 },
+  { name: "K'ril Tsutsaroth", min: 5, max: 20 },
+  { name: "Nex", min: 3, max: 10 },
+  { name: "Nightmare", min: 3, max: 10 },
+  { name: "Phosani's Nightmare", min: 1, max: 3 },
+  { name: "Obor", min: 3, max: 10 },
+  { name: "Sarachnis", min: 5, max: 20 },
+  { name: "Scorpia", min: 3, max: 10 },
+  { name: "Skotizo", min: 1, max: 5 },
+  { name: "Tempoross", min: 5, max: 15 },
+  { name: "The Gauntlet", min: 3, max: 10 },
+  { name: "The Corrupted Gauntlet", min: 3, max: 7 },
+  { name: "The Leviathan", min: 3, max: 10 },
+  { name: "The Whisperer", min: 3, max: 10 },
+  { name: "Thermonuclear Smoke Devil", min: 5, max: 20 },
+  { name: "Tombs of Amascut", min: 1, max: 5 },
+  { name: "TzKal-Zuk", min: 1, max: 3 },
+  { name: "TzTok-Jad", min: 1, max: 3 },
+  { name: "Vardorvis", min: 3, max: 10 },
+  { name: "Venenatis", min: 3, max: 15 },
+  { name: "Vet'ion", min: 3, max: 15 },
+  { name: "Vorkath", min: 5, max: 20 },
+  { name: "Wintertodt", min: 5, max: 15 },
+  { name: "Zalcano", min: 5, max: 15 },
+  { name: "Zulrah", min: 5, max: 15 }
+];
+
+const painRules = [
+  "No protection prayers",
+  "No special attacks",
+  "Melee only",
+  "Ranged only",
+  "Magic only",
+  "No offensive prayers",
+  "No teleporting out",
+  "No food (tick eats allowed)",
+  "Budget gear only",
+  "No run energy",
+  "Wilderness world only"
 ];
 
 function rollTask() {
   const boss = bosses[Math.floor(Math.random() * bosses.length)];
-  const kc = Math.floor(Math.random() * 23) + 3;
+  const kc = Math.floor(Math.random() * (boss.max - boss.min + 1)) + boss.min;
   const painEnabled = document.getElementById("painModeToggle").checked;
 
-  document.getElementById("boss").textContent = boss;
+  document.getElementById("boss").textContent = boss.name;
   document.getElementById("kc").textContent = kc;
-  document.getElementById("pain").textContent = painEnabled ? "🔥 ENABLED" : "Normal";
+
+  if (painEnabled) {
+    const rule = painRules[Math.floor(Math.random() * painRules.length)];
+    document.getElementById("pain").textContent = "🔥 " + rule;
+  } else {
+    document.getElementById("pain").textContent = "Normal";
+  }
 }
 </script>
+
 
 </body>
 </html>
